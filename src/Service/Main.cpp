@@ -1,5 +1,5 @@
 /**
- *  app_base
+ *  mrh_app_base
  *  Copyright (C) 2021 Jens Brörken
  *
  *  This software is provided 'as-is', without any express or implied

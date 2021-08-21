@@ -1,4 +1,4 @@
-# app_base
+# mrh_app_base
 
 <p align="center">
 <img width="100%" height="100%" src="/doc/source/banner.png">
@@ -7,7 +7,7 @@
 
 ## About
 
-The app_base project serves as a starting point for application development.
+The mrh_app_base project serves as a starting point for application development.
 This project provides a basic structure to build on, structuring everything based aroung a CMake build.
 
 This projects includes both the template for a executable MRH application as well as a MRH application service.

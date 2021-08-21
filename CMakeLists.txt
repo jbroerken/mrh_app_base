@@ -27,9 +27,9 @@ set(CMAKE_CXX_STANDARD 14)
 #  ------------
 #  General simple information about our project.
 ###
-project(app_base VERSION 1.0
-                 DESCRIPTION "MRH application base project"
-                 LANGUAGES CXX)
+project(mrh_app_base VERSION 1.0
+                     DESCRIPTION "MRH application base project"
+                     LANGUAGES CXX)
 
 
 #########################################################################
