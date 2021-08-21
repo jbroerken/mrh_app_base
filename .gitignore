@@ -30,3 +30,12 @@
 *.exe
 *.out
 *.app
+
+# macOS
+.DS_Store
+./xcode
+./xcode/*
+./xcode/app_base_app
+./xcode/app_base_service
+xcode/app_base_app/
+xcode/app_base_service/
