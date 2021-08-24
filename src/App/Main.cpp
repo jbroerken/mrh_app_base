@@ -45,150 +45,160 @@ namespace
 }
 
 
-//*************************************************************************************
-// Init
-//*************************************************************************************
-
-int MRH_Init(const char* p_LaunchInput, int i_LaunchCommandID)
+// Prevent name wrangling for library header functions
+#ifdef __cplusplus
+extern "C"
 {
-    /**
-     *  This function will be called once on application startup.
-     *  The library context should be created here to catch early issues.
-     */
+#endif
     
-    try
-    {
-        // Create the library context, setting up the module stack
-        // and thread pool for event jobs
-        p_Context = new libmrhab(std::make_unique<HelloWorld>(),
-                                 i_CallbackThreadCount);
-        return 0;
-    }
-    catch (MRH_ABException& e)
-    {
-        printf("Failed to initialize app base library: %s\n", e.what());
-        return -1;
-    }
-    catch (std::exception& e) // alloc and other stuff
-    {
-        printf("General exception: %s\n", e.what());
-        return -1;
-    }
-}
+    //*************************************************************************************
+    // Init
+    //*************************************************************************************
 
-//*************************************************************************************
-// Recieve Event
-//*************************************************************************************
-
-void MRH_RecieveEvent(const MRH_Event* p_Event)
-{
-    /**
-     *  This function is called until all events recieved by application services
-     *  have been handed to the application.
-     *  Events recieved here are never NULL and don't have to be deallocated after
-     *  use.
-     *
-     *  The recieved event should here be handed to the context to give the event
-     *  as a job to the current module.
-     */
+    int MRH_Init(const char* p_LaunchInput, int i_LaunchCommandID)
+    {
+        /**
+         *  This function will be called once on application startup.
+         *  The library context should be created here to catch early issues.
+         */
     
-    try
-    {
-        // Add recieved event as library thread pool job
-        // for the current module
-        p_Context->AddJob(p_Event);
-    }
-    catch (MRH_ABException& e)
-    {
-        printf("Failed to add event job: %s\n", e.what());
-    }
-}
-
-//*************************************************************************************
-// Send Event
-//*************************************************************************************
-
-MRH_Event* MRH_SendEvent(void)
-{
-    /**
-     *  This function is called after the last MRH_RecieveEvent function call.
-     *  It will be called until NULL is returned (meaning no more events to send).
-     *
-     *  The current module should be updated here (for main thread guarantee), once.
-     */
-    
-    // We update the module first, but this is actually
-    // not a requirement. It just makes events sendable
-    // faster.
-    // We flag with a boolean to prevent calling module
-    // updates for every SendEvent call
-    static bool b_UpdateModules = true;
-    
-    if (b_UpdateModules == true)
-    {
         try
         {
-            // Perform the update first, generating module events
-            LIBMRHAB_UPDATE_RESULT b_Result = p_Context->Update();
-            
-            // App closing requested?
-            if (b_Result == LIBMRHAB_UPDATE_CLOSE_APP)
-            {
-                // Set app closure, and then send remaining events
-                // generated this module update
-                b_CloseApp = true;
-            }
+            // Create the library context, setting up the module stack
+            // and thread pool for event jobs
+            p_Context = new libmrhab(std::make_unique<HelloWorld>(),
+                                     i_CallbackThreadCount);
+            return 0;
         }
         catch (MRH_ABException& e)
         {
-            printf("Module update failed: %s\n", e.what());
-            
-            // Stop sending immediatly to get to MRH_CanExit()
-            b_CloseApp = true;
-            return NULL;
+            printf("Failed to initialize app base library: %s\n", e.what());
+            return -1;
         }
+        catch (std::exception& e) // alloc and other stuff
+        {
+            printf("General exception: %s\n", e.what());
+            return -1;
+        }
+    }
+
+    //*************************************************************************************
+    // Recieve Event
+    //*************************************************************************************
+
+    void MRH_RecieveEvent(const MRH_Event* p_Event)
+    {
+        /**
+         *  This function is called until all events recieved by application services
+         *  have been handed to the application.
+         *  Events recieved here are never NULL and don't have to be deallocated after
+         *  use.
+         *
+         *  The recieved event should here be handed to the context to give the event
+         *  as a job to the current module.
+         */
+    
+        try
+        {
+            // Add recieved event as library thread pool job
+            // for the current module
+            p_Context->AddJob(p_Event);
+        }
+        catch (MRH_ABException& e)
+        {
+            printf("Failed to add event job: %s\n", e.what());
+        }
+    }
+
+    //*************************************************************************************
+    // Send Event
+    //*************************************************************************************
+
+    MRH_Event* MRH_SendEvent(void)
+    {
+        /**
+         *  This function is called after the last MRH_RecieveEvent function call.
+         *  It will be called until NULL is returned (meaning no more events to send).
+         *
+         *  The current module should be updated here (for main thread guarantee), once.
+         */
+    
+        // We update the module first, but this is actually
+        // not a requirement. It just makes events sendable
+        // faster.
+        // We flag with a boolean to prevent calling module
+        // updates for every SendEvent call
+        static bool b_UpdateModules = true;
+    
+        if (b_UpdateModules == true)
+        {
+            try
+            {
+                // Perform the update first, generating module events
+                LIBMRHAB_UPDATE_RESULT b_Result = p_Context->Update();
+            
+                // App closing requested?
+                if (b_Result == LIBMRHAB_UPDATE_CLOSE_APP)
+                {
+                    // Set app closure, and then send remaining events
+                    // generated this module update
+                    b_CloseApp = true;
+                }
+            }
+            catch (MRH_ABException& e)
+            {
+                printf("Module update failed: %s\n", e.what());
+            
+                // Stop sending immediatly to get to MRH_CanExit()
+                b_CloseApp = true;
+                return NULL;
+            }
         
-        // Reset, next calls don't update
-        b_UpdateModules = false;
+            // Reset, next calls don't update
+            b_UpdateModules = false;
+        }
+    
+        // Send the oldest available event and remove it from storage
+        MRH_Event* p_Event = MRH_EventStorage::Singleton().GetEvent(true);
+    
+        // Is the container empty now with nothing left to send?
+        if (p_Event == NULL)
+        {
+            // All generated events are sent, next call should update again
+            b_UpdateModules = true;
+        }
+    
+        return p_Event;
     }
-    
-    // Send the oldest available event and remove it from storage
-    MRH_Event* p_Event = MRH_EventStorage::Singleton().GetEvent(true);
-    
-    // Is the container empty now with nothing left to send?
-    if (p_Event == NULL)
+
+    //*************************************************************************************
+    // Exit
+    //*************************************************************************************
+
+    int MRH_CanExit(void)
     {
-        // All generated events are sent, next call should update again
-        b_UpdateModules = true;
+        /**
+         *  This function is called at the start of each update loop. Returning 0
+         *  then breaks out of the update loop and continues to MRH_Exit().
+         */
+    
+        return b_CloseApp == true ? 0 : -1;
     }
-    
-    return p_Event;
-}
 
-//*************************************************************************************
-// Exit
-//*************************************************************************************
-
-int MRH_CanExit(void)
-{
-    /**
-     *  This function is called at the start of each update loop. Returning 0
-     *  then breaks out of the update loop and continues to MRH_Exit().
-     */
-    
-    return b_CloseApp == true ? 0 : -1;
-}
-
-void MRH_Exit(void)
-{
-    /**
-     *  This function is called once on normal service exit. A crash will not call
-     *  this function.
-     */
-    
-    // Check NULL for the rare case where SIGTERM hits before MRH_Init (or during)
-    if (p_Context != NULL)
+    void MRH_Exit(void)
     {
-        delete p_Context;
+        /**
+         *  This function is called once on normal service exit. A crash will not call
+         *  this function.
+         */
+    
+        // Check NULL for the rare case where SIGTERM hits before MRH_Init (or during)
+        if (p_Context != NULL)
+        {
+            delete p_Context;
+        }
     }
+    
+#ifdef __cplusplus
 }
+#endif

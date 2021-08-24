@@ -30,56 +30,66 @@
 // Project
 
 
-//*************************************************************************************
-// Init
-//*************************************************************************************
-
-int MRH_Init(void)
+// Prevent name wrangling for library header functions
+#ifdef __cplusplus
+extern "C"
 {
-    /**
-     *  This function will be called once on service startup.
-     *  Initial events and service setup should be handled here.
-     */
+#endif
     
-    return 0;
-}
+    //*************************************************************************************
+    // Init
+    //*************************************************************************************
 
-//*************************************************************************************
-// Update
-//*************************************************************************************
-
-int MRH_Update(void)
-{
-    /**
-     *  This function will be called in a set timeframe (defined by configuration values).
-     *  Updating the service and preparing events to sent should be performed here.
-     */
+    int MRH_Init(void)
+    {
+        /**
+         *  This function will be called once on service startup.
+         *  Initial events and service setup should be handled here.
+         */
     
-    return 0;
-}
+        return 0;
+    }
 
-//*************************************************************************************
-// Event
-//*************************************************************************************
+    //*************************************************************************************
+    // Update
+    //*************************************************************************************
 
-MRH_Event* MRH_SendEvent(void)
-{
-    /**
-     *  This function is called after the MRH_Update function. It will be called until
-     *  NULL is returned (meaning no more events to send).
-     */
+    int MRH_Update(void)
+    {
+        /**
+         *  This function will be called in a set timeframe (defined by configuration values).
+         *  Updating the service and preparing events to sent should be performed here.
+         */
     
-    return NULL;
-}
+        return 0;
+    }
 
-//*************************************************************************************
-// Exit
-//*************************************************************************************
+    //*************************************************************************************
+    // Event
+    //*************************************************************************************
 
-void MRH_Exit(void)
-{
-    /**
-     *  This function is called once on normal service exit. A crash will not call
-     *  this function.
-     */
+    MRH_Event* MRH_SendEvent(void)
+    {
+        /**
+         *  This function is called after the MRH_Update function. It will be called until
+         *  NULL is returned (meaning no more events to send).
+         */
+    
+        return NULL;
+    }
+
+    //*************************************************************************************
+    // Exit
+    //*************************************************************************************
+
+    void MRH_Exit(void)
+    {
+        /**
+         *  This function is called once on normal service exit. A crash will not call
+         *  this function.
+         */
+    }
+
+#ifdef __cplusplus
 }
+#endif
