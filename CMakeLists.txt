@@ -90,20 +90,20 @@ set(LIB_DIR_PATH "${CMAKE_SOURCE_DIR}/lib/")
 set(INCLUDE_DIR_PATH "${CMAKE_SOURCE_DIR}/include/")
 
 set(LIB_BIN_LIST_APP "${LIB_DIR_PATH}/libmrh.a"
-				     "${LIB_DIR_PATH}/libmrhcevs.a"
-				     "${LIB_DIR_PATH}/libmrhab.a"
-				     "${LIB_DIR_PATH}/libmrhbf.a"
-				     "${LIB_DIR_PATH}/libmrhvt.a")
+                     "${LIB_DIR_PATH}/libmrhcevs.a"
+                     "${LIB_DIR_PATH}/libmrhab.a"
+                     "${LIB_DIR_PATH}/libmrhbf.a"
+                     "${LIB_DIR_PATH}/libmrhvt.a")
 set(LIB_INCLUDE_LIST_APP "${INCLUDE_DIR_PATH}/mrhshared"
-					     "${INCLUDE_DIR_PATH}/libmrh"
-					     "${INCLUDE_DIR_PATH}/libmrhcevs"
-					     "${INCLUDE_DIR_PATH}/libmrhab"
-					     "${INCLUDE_DIR_PATH}/libmrhbf"
-					     "${INCLUDE_DIR_PATH}/libmrhvt")
+                         "${INCLUDE_DIR_PATH}/libmrh"
+                         "${INCLUDE_DIR_PATH}/libmrhcevs"
+                         "${INCLUDE_DIR_PATH}/libmrhab"
+                         "${INCLUDE_DIR_PATH}/libmrhbf"
+                         "${INCLUDE_DIR_PATH}/libmrhvt")
 						 
 set(LIB_BIN_LIST_SERVICE "${LIB_DIR_PATH}/libmrhs.a")
 set(LIB_INCLUDE_LIST_SERVICE "${INCLUDE_DIR_PATH}/mrhshared"
-					         "${INCLUDE_DIR_PATH}/libmrhs")
+                             "${INCLUDE_DIR_PATH}/libmrhs")
 
 
 #########################################################################
@@ -124,23 +124,23 @@ set(LIB_INCLUDE_LIST_SERVICE "${INCLUDE_DIR_PATH}/mrhshared"
 add_library(MRH_App SHARED ${SRC_LIST_APP}
                            ${SRC_LIST_APP_MODULE_HELLOWORLD})
 set_target_properties(MRH_App
-    				  PROPERTIES
-					  PREFIX ""
-					  OUTPUT_NAME "App"
-					  SUFFIX ".so"
-    				  ARCHIVE_OUTPUT_DIRECTORY ${BIN_DIR_PATH}
-    				  LIBRARY_OUTPUT_DIRECTORY ${BIN_DIR_PATH}
-    				  RUNTIME_OUTPUT_DIRECTORY ${BIN_DIR_PATH})
+                      PROPERTIES
+                      PREFIX ""
+                      OUTPUT_NAME "App"
+                      SUFFIX ".so"
+                      ARCHIVE_OUTPUT_DIRECTORY ${BIN_DIR_PATH}
+                      LIBRARY_OUTPUT_DIRECTORY ${BIN_DIR_PATH}
+                      RUNTIME_OUTPUT_DIRECTORY ${BIN_DIR_PATH})
 					  
 add_library(MRH_Service SHARED ${SRC_LIST_SERVICE})
 set_target_properties(MRH_Service
-    				  PROPERTIES
-					  PREFIX ""
-					  OUTPUT_NAME "Service"
-					  SUFFIX ".so"
-    				  ARCHIVE_OUTPUT_DIRECTORY ${BIN_DIR_PATH}
-    				  LIBRARY_OUTPUT_DIRECTORY ${BIN_DIR_PATH}
-    				  RUNTIME_OUTPUT_DIRECTORY ${BIN_DIR_PATH})
+                      PROPERTIES
+                      PREFIX ""
+                      OUTPUT_NAME "Service"
+                      SUFFIX ".so"
+                      ARCHIVE_OUTPUT_DIRECTORY ${BIN_DIR_PATH}
+                      LIBRARY_OUTPUT_DIRECTORY ${BIN_DIR_PATH}
+                      RUNTIME_OUTPUT_DIRECTORY ${BIN_DIR_PATH})
 
 ###
 #  Required Libraries
