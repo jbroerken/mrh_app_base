@@ -27,10 +27,9 @@ set(CMAKE_CXX_STANDARD 14)
 #  ------------
 #  General simple information about our project.
 ###
-project(mrh_app_base VERSION 1.0
+project(mrh_app_base VERSION 1.0.0
                      DESCRIPTION "MRH application base project"
                      LANGUAGES CXX)
-
 
 #########################################################################
 #
@@ -45,7 +44,6 @@ project(mrh_app_base VERSION 1.0
 ###
 set(BIN_DIR_PATH "${CMAKE_SOURCE_DIR}/bin/")
 file(MAKE_DIRECTORY ${BIN_DIR_PATH})
-
 
 ###
 #  Build Paths
@@ -86,25 +84,14 @@ set(SRC_LIST_SERVICE "${SRC_DIR_PATH_SERVICE}/Main.cpp")
 #  Both the binary and include paths should be set here.
 #  Add OS specific libraries in their own lists.
 ###
-set(LIB_DIR_PATH "${CMAKE_SOURCE_DIR}/lib/")
-set(INCLUDE_DIR_PATH "${CMAKE_SOURCE_DIR}/include/")
+set(STATIC_LIB_DIR_PATH "${CMAKE_SOURCE_DIR}/lib/")
+set(STATIC_INCLUDE_DIR_PATH "${CMAKE_SOURCE_DIR}/include/")
 
-set(LIB_BIN_LIST_APP "${LIB_DIR_PATH}/libmrh.a"
-                     "${LIB_DIR_PATH}/libmrhcevs.a"
-                     "${LIB_DIR_PATH}/libmrhab.a"
-                     "${LIB_DIR_PATH}/libmrhbf.a"
-                     "${LIB_DIR_PATH}/libmrhvt.a")
-set(LIB_INCLUDE_LIST_APP "${INCLUDE_DIR_PATH}/mrhshared"
-                         "${INCLUDE_DIR_PATH}/libmrh"
-                         "${INCLUDE_DIR_PATH}/libmrhcevs"
-                         "${INCLUDE_DIR_PATH}/libmrhab"
-                         "${INCLUDE_DIR_PATH}/libmrhbf"
-                         "${INCLUDE_DIR_PATH}/libmrhvt")
+#set(STATIC_LIB_BIN_LIST_APP "${STATIC_LIB_DIR_PATH}/my_lib.a")
+#set(STATIC_LIB_INCLUDE_LIST_APP "${STATIC_INCLUDE_DIR_PATH}/my_lib_headers")
 						 
-set(LIB_BIN_LIST_SERVICE "${LIB_DIR_PATH}/libmrhs.a")
-set(LIB_INCLUDE_LIST_SERVICE "${INCLUDE_DIR_PATH}/mrhshared"
-                             "${INCLUDE_DIR_PATH}/libmrhs")
-
+#set(STATIC_LIB_BIN_LIST_SERVICE "${STATIC_LIB_DIR_PATH}/my_lib.a")
+#set(STATIC_LIB_INCLUDE_LIST_SERVICE "${STATIC_INCLUDE_DIR_PATH}/my_lib_headers")
 
 #########################################################################
 #
@@ -118,7 +105,8 @@ set(LIB_INCLUDE_LIST_SERVICE "${INCLUDE_DIR_PATH}/mrhshared"
 #  The target(s) to build.
 #
 #  NOTE: 
-#  MRH applications are required to be named App.so!
+#  MRH applications are required to be named App.so, 
+#  and application services Service.so!
 #  They are build as shared objects.
 ###
 add_library(MRH_App SHARED ${SRC_LIST_APP}
@@ -147,11 +135,30 @@ set_target_properties(MRH_Service
 #  ------------------
 #  Libraries required by this application.
 ###
-target_link_libraries(MRH_App PUBLIC ${LIB_BIN_LIST_APP})
-target_include_directories(MRH_App PUBLIC ${LIB_INCLUDE_LIST_APP})
+set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
+set(THREADS_PREFER_PTHREAD_FLAG TRUE)
 
-target_link_libraries(MRH_Service PUBLIC ${LIB_BIN_LIST_SERVICE})
-target_include_directories(MRH_Service PUBLIC ${LIB_INCLUDE_LIST_SERVICE})
+find_package(Threads REQUIRED)
+find_library(libmrh NAMES mrh REQUIRED)
+find_library(libmrhbf NAMES mrhbf REQUIRED)
+find_library(libmrhcevs NAMES mrhcevs REQUIRED)
+find_library(libmrhab NAMES mrhab REQUIRED)
+find_library(libmrhvt NAMES mrhvt REQUIRED)
+find_library(libmrhs NAMES mrhs REQUIRED)
+
+#target_include_directories(MRH_App PUBLIC ${STATIC_LIB_INCLUDE_LIST_APP})
+#target_include_directories(MRH_Service PUBLIC ${STATIC_LIB_INCLUDE_LIST_SERVICE})
+
+target_link_libraries(MRH_App PUBLIC Threads::Threads)
+target_link_libraries(MRH_App PUBLIC mrh)
+target_link_libraries(MRH_App PUBLIC mrhab)
+target_link_libraries(MRH_App PUBLIC mrhcevs)
+target_link_libraries(MRH_App PUBLIC mrhab)
+target_link_libraries(MRH_App PUBLIC mrhvt)
+#target_link_libraries(MRH_App PUBLIC ${STATIC_LIB_BIN_LIST_APP})
+
+target_link_libraries(MRH_Service PUBLIC mrhs)
+#target_link_libraries(MRH_Service PUBLIC ${STATIC_LIB_BIN_LIST_SERVICE})
 
 ###
 #  Source Definitions

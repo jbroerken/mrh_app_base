@@ -69,7 +69,7 @@ Directory | Description
 bin | Contains the built project executables.
 build | CMake build directory.
 doc | Documentation files.
-include | Library header files used by the project.
-lib | Library files used by the project.
+include | Static library header files used by the project.
+lib | Static library files used by the project.
 pkg | The project package directory (files, configuration, etc.).
 src | Project source code.
