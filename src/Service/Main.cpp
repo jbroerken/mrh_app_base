@@ -30,7 +30,7 @@
 // Project
 
 
-// Prevent name wrangling for library header functions
+// Prevent name wrangling
 #ifdef __cplusplus
 extern "C"
 {
@@ -58,7 +58,7 @@ extern "C"
     {
         /**
          *  This function will be called in a set timeframe (defined by configuration values).
-         *  Updating the service and preparing events to sent should be performed here.
+         *  Updating the service and preparing events to send should be performed here.
          */
     
         return 0;
@@ -85,7 +85,7 @@ extern "C"
     void MRH_Exit(void)
     {
         /**
-         *  This function is called once on normal service exit. A crash will not call
+         *  This function is called once on normal exit. A crash will not call
          *  this function.
          */
     }

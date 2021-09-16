@@ -40,12 +40,12 @@ namespace
     bool b_CloseApp = false;
 
     // The callback thread count to hand events to the current module
-    // Using a count of 0 created a single threaded application.
+    // Using a count of 0 creates a single threaded application.
     constexpr int i_CallbackThreadCount = 1;
 }
 
 
-// Prevent name wrangling for library header functions
+// Prevent name wrangling
 #ifdef __cplusplus
 extern "C"
 {
@@ -188,7 +188,7 @@ extern "C"
     void MRH_Exit(void)
     {
         /**
-         *  This function is called once on normal service exit. A crash will not call
+         *  This function is called once on normal exit. A crash will not call
          *  this function.
          */
     
