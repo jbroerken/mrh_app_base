@@ -40,7 +40,7 @@ namespace
     bool b_CloseApp = false;
 
     // The callback thread count to hand events to the current module
-    // 1 thread is the minimum, 0 will cause an exception
+    // Using a count of 0 created a single threaded application.
     constexpr int i_CallbackThreadCount = 1;
 }
 
