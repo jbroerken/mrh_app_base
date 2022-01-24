@@ -43,7 +43,7 @@ HelloWorld::~HelloWorld() noexcept
 // Update
 //*************************************************************************************
 
-void HelloWorld::HandleEvent(const MRH_EVBase* p_Event) noexcept
+void HelloWorld::HandleEvent(const MRH_Event* p_Event) noexcept
 {
     /**
      *  This function is where events recieved by the module are handled.
