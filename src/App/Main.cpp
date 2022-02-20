@@ -1,6 +1,6 @@
 /**
  *  mrh_app_base
- *  Copyright (C) 2021 Jens Brörken
+ *  Copyright (C) 2021 - 2022 Jens Brörken
  *
  *  This software is provided 'as-is', without any express or implied
  *  warranty.  In no event will the authors be held liable for any damages
@@ -89,7 +89,7 @@ extern "C"
     void MRH_RecieveEvent(const MRH_Event* p_Event)
     {
         /**
-         *  This function is called until all events recieved by application services
+         *  This function is called until all events recieved from platform services
          *  have been handed to the application.
          *  Events recieved here are never NULL and don't have to be deallocated after
          *  use.
@@ -179,7 +179,7 @@ extern "C"
     {
         /**
          *  This function is called at the start of each update loop. Returning 0
-         *  then breaks out of the update loop and continues to MRH_Exit().
+         *  breaks out of the update loop and continues to MRH_Exit().
          */
     
         return b_CloseApp == true ? 0 : -1;

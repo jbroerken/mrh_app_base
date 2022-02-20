@@ -1,6 +1,6 @@
 /**
  *  mrh_app_base
- *  Copyright (C) 2021 Jens Brörken
+ *  Copyright (C) 2021 - 2022 Jens Brörken
  *
  *  This software is provided 'as-is', without any express or implied
  *  warranty.  In no event will the authors be held liable for any damages
@@ -51,8 +51,8 @@ void HelloWorld::HandleEvent(const MRH_Event* p_Event) noexcept
      *  the result of the CanHandleEvent() call.
      *
      *  The HandleEvent function is called from the thread pool background
-     *  threads. Events can be casted to the correct type (based on the event type)
-     *  by using the event_cast<class> macro.
+     *  threads. Multiple threads might call HandleEvent() at the same time
+     *  if the libmrhab context was created with multiple threads.
      */
 }
 
@@ -60,8 +60,9 @@ MRH_Module::Result HelloWorld::Update()
 {
     /**
      *  The Update() function allows the module to update data without
-     *  recieving a event. This function should only be called once
-     *  directly after the last event job was added to the library.
+     *  recieving a event. This function will be called once on the thread
+     *  which performed the module stack update after the last HandleEvent() 
+     *  call has been completed.
      *
      *  Depending on the return result the module stack takes differnt
      *  actions:
@@ -85,8 +86,7 @@ MRH_Module::Result HelloWorld::Update()
      *    The module stack will signal that the app can close if this module was the
      *    top module.
      *
-     *  Exceptions thrown here are passed down to the libmrh update function.
-     *
+     *  Exceptions thrown here are passed down to the module stack update function.
      */
     
     printf("Hello, World!\n");
@@ -99,18 +99,17 @@ std::shared_ptr<MRH_Module> HelloWorld::NextModule()
      *  This function will be called if the Update() function returned either
      *  MRH_Module::FINISHED_APPEND or MRH_Module::FINISHED_REPLACE.
      *
-     *  The module can freely be created based on information of this module and
+     *  The module can be freely created based on information of this module and
      *  other application data since the NextModule() call only happens after
      *  the update call.
      *
      *  Returning a shared_ptr storing NULL will cause the NULL module to be
-     *  popped immediatly, returning to either this model if append was choosen
+     *  popped immediatly, returning to either this module if append was choosen
      *  or the one before it if replace was chosen.
      *  The module stack will signal that the app can close if the returned NULL
      *  module was meant to replace the top module.
      *
-     *  Exceptions thrown here are passed down to the libmrh update function.
-     *
+     *  Exceptions thrown here are passed down to the module stack update function.
      */
     
     throw MRH_ModuleException("HelloWorld",
