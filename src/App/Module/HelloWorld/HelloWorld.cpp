@@ -46,8 +46,8 @@ HelloWorld::~HelloWorld() noexcept
 void HelloWorld::HandleEvent(const MRH_Event* p_Event) noexcept
 {
     /**
-     *  This function is where events recieved by the module are handled.
-     *  Modules will only recieve events if they are recievable based on
+     *  This function is where events received by the module are handled.
+     *  Modules will only receive events if they are recievable based on
      *  the result of the CanHandleEvent() call.
      *
      *  The HandleEvent function is called from the thread pool background

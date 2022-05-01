@@ -83,24 +83,24 @@ extern "C"
     }
 
     //*************************************************************************************
-    // Recieve Event
+    // Receive Event
     //*************************************************************************************
 
-    void MRH_RecieveEvent(const MRH_Event* p_Event)
+    void MRH_ReceiveEvent(const MRH_Event* p_Event)
     {
         /**
-         *  This function is called until all events recieved from platform services
+         *  This function is called until all events received from platform services
          *  have been handed to the application.
-         *  Events recieved here are never NULL and don't have to be deallocated after
+         *  Events received here are never NULL and don't have to be deallocated after
          *  use.
          *
-         *  The recieved event should here be handed to the context to give the event
+         *  The received event should here be handed to the context to give the event
          *  as a job to the current module.
          */
     
         try
         {
-            // Add recieved event as library thread pool job
+            // Add received event as library thread pool job
             // for the current module
             p_Context->AddJob(p_Event);
         }
@@ -117,7 +117,7 @@ extern "C"
     MRH_Event* MRH_SendEvent(void)
     {
         /**
-         *  This function is called after the last MRH_RecieveEvent function call.
+         *  This function is called after the last MRH_ReceiveEvent function call.
          *  It will be called until NULL is returned (meaning no more events to send).
          *
          *  The current module should be updated here (for main thread guarantee), once.
