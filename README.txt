@@ -77,8 +77,7 @@ Their names and descriptions are as follows:
 Directory List:
 bin: Contains the built project executables.
 build: CMake build directory.
-doc: Documentation files.
 include: Static library header files used by the project.
 lib: Static library files used by the project.
-pkg: The project package directory (files, configuration, etc.).
+res: Ressource files (git and project package directory).
 src: Project source code.

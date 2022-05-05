@@ -1,7 +1,7 @@
 # mrh_app_base
 
 <p align="center">
-<img width="100%" height="100%" src="/doc/source/banner.png">
+<img width="100%" height="100%" src="/res/git/banner.png">
 </p>
 
 
@@ -68,8 +68,7 @@ Directory | Description
 --------- | -----------
 bin | Contains the built project executables.
 build | CMake build directory.
-doc | Documentation files.
 include | Static library header files used by the project.
 lib | Static library files used by the project.
-pkg | The project package directory (files, configuration, etc.).
+res | Ressource files (git and project package directory).
 src | Project source code.
